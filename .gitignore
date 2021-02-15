@@ -6,5 +6,6 @@
 *.suo
 *.user
 /bin
-/msvc
 /obj
+/msvc/bin
+/msvc/lib

@@ -1,4 +1,4 @@
-#ifndef _ASSRENDER_H_
+﻿#ifndef _ASSRENDER_H_
 #define _ASSRENDER_H_
 
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include <math.h>
 #include <string.h>
 #include <ass/ass.h>
-#include "avisynth_c.h"
+#include <avisynth_c.h>
 
 #if defined(_MSC_VER)
 #define __NO_ISOCEXT

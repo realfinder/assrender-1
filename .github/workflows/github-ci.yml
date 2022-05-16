@@ -80,9 +80,9 @@ jobs:
       - name: Build MINGW64 binary
         shell: msys2 {0}
         run: |
-           cmd Del CMakeCache.txt
-           cmake -G "MinGW Makefiles"
-           cmake --build build --config Release --clean-first
+           cmd Del ..\CMakeCache.txt
+           cmake .. -G "MinGW Makefiles"
+           cmake --build . --config Release --clean-first
       - name: Copy MINGW64 binary
         run: cmake -E copy "build\src\assrender.dll" "dist\Release_MINGW64\assrender.dll"
       - name: Upload artifact

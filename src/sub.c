@@ -1,6 +1,6 @@
 #include "sub.h"
 
-void ass_read_colorspace(const char* f, char* csp) {
+void ass_read_matrix(const char* f, char* csp) {
     char buf[BUFSIZ];
     FILE* fh = fopen(f, "r");
 
@@ -11,8 +11,11 @@ void ass_read_colorspace(const char* f, char* csp) {
         if (buf[0] == 0 || buf[0] == '\n' || buf[0] == '\r')
             continue;
 
-        if (sscanf(buf, "Video Colorspace: %s", csp) == 1)
+        if (sscanf(buf, "YCbCr Matrix: %s", csp) == 1)
             break;
+
+        if (sscanf(buf, "Video Colorspace: %s", csp) == 1)
+          break;
 
         if (!strcmp(buf, "[Events]"))
             break;
@@ -78,7 +81,7 @@ ASS_Track* parse_srt(const char* f, udata* ud, const char* srt_font)
 
 void msg_callback(int level, const char* fmt, va_list va, void* data)
 {
-    if (level > (int)data)
+    if (level > (intptr_t)data)
         return;
 
     fprintf(stderr, "libass: ");
@@ -97,7 +100,7 @@ int init_ass(int w, int h, double scale, double line_spacing,
     if (!ass_library)
         return 0;
 
-    ass_set_message_cb(ass_library, msg_callback, (void*)verbosity);
+    ass_set_message_cb(ass_library, msg_callback, (void*)(intptr_t)verbosity);
     ass_set_extract_fonts(ass_library, 0);
     ass_set_style_overrides(ass_library, 0);
 
@@ -109,6 +112,7 @@ int init_ass(int w, int h, double scale, double line_spacing,
     ass_set_font_scale(ass_renderer, scale);
     ass_set_hinting(ass_renderer, hinting);
     ass_set_frame_size(ass_renderer, w, h);
+    ass_set_storage_size(ass_renderer, w, h);
     ass_set_margins(ass_renderer, top, bottom, left, right);
     ass_set_use_margins(ass_renderer, 1);
 
@@ -116,7 +120,7 @@ int init_ass(int w, int h, double scale, double line_spacing,
         ass_set_line_spacing(ass_renderer, line_spacing);
 
     if (dar && sar)
-        ass_set_aspect_ratio(ass_renderer, dar, sar);
+        ass_set_pixel_aspect(ass_renderer, dar / sar);
 
     if (strcmp(fontdir, ""))
         ass_set_fonts_dir(ass_library, fontdir);

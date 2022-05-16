@@ -42,10 +42,6 @@ jobs:
       - name: Install dependencies
         run: |
           git submodule update --init --recursive
-          git clone https://github.com/ShiftMediaProject/VSYASM.git
-          .\VSYASM\install_script.bat
-          git clone https://github.com/ShiftMediaProject/VSNASM.git
-          .\VSNASM\install_script.bat
           md avsplus
       - name: Install MSYS2 with dependencies
         uses: msys2/setup-msys2@v2
@@ -84,12 +80,9 @@ jobs:
       - name: Build MINGW64 binary
         shell: msys2 {0}
         run: |
-           cmake -G "MinGW Makefiles" -B build -S .
+           del CMakeCache.txt
+           cmake -G "MinGW Makefiles"
            cmake --build build --config Release --clean-first
-      - name: Copy x86 binary
-        run: cmake -E copy "bin\Release_Win32\assrender.dll" "dist\Release_x86\assrender.dll"
-      - name: Copy x64 binary
-        run: cmake -E copy "bin\Release_x64\assrender.dll" "dist\Release_x64\assrender.dll"
       - name: Copy MINGW64 binary
         run: cmake -E copy "build\src\assrender.dll" "dist\Release_MINGW64\assrender.dll"
       - name: Upload artifact

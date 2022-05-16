@@ -47,9 +47,9 @@ jobs:
           git clone https://github.com/ShiftMediaProject/VSNASM.git
           .\VSNASM\install_script.bat
           md avsplus
-          name: Install MSYS2 with dependencies
-          uses: msys2/setup-msys2@v2
-          with:
+      - name: Install MSYS2 with dependencies
+        uses: msys2/setup-msys2@v2
+        with:
             update: true
             install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-libass
             msystem: MINGW64
